@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Wallpaper have</title>
+</head>
+<body>
+<form id='file-catcher'>
+    <input id='file-input' type='file' multiple/>
+    <input type="text" id="text-url">
+    <button type='submit'>
+        Submit
+    </button>
+</form>
+<div id='file-list-display'></div>
+</body>
+<script type="text/javascript">
+    (function () {
+
+        // downloadingImage.src = "https://cdn.wallpaperhub.app/cloudcache/5/a/8/7/d/f/5a87df2852203ded3414068961eca579511d8beb.jpg";
+
+        var fileCatcher = document.getElementById('file-catcher');
+        var fileInput = document.getElementById('file-input');
+        var urlInput = document.getElementById('text-url');
+        var fileListDisplay = document.getElementById('file-list-display');
+
+        var fileList = [];
+        var renderFileList, sendFile;
+
+        fileCatcher.addEventListener('submit', function (evnt) {
+            evnt.preventDefault();
+            fileList.forEach(function (file) {
+                sendPhoto(file);
+            });
+
+        });
+
+        fileInput.addEventListener('change', function (evnt) {
+            fileList = [];
+            for (var i = 0; i < fileInput.files.length; i++) {
+                fileList.push(fileInput.files[i]);
+            }
+            renderFileList();
+        });
+        urlInput.addEventListener('change', function (evnt) {
+            fileList = [];
+            var image = document.images[0];
+            var downloadingImage = new Image();
+            downloadingImage.onload = function(){
+                image = this.src;
+                fileList.push(image);
+            };
+            console.log(urlInput.value)
+            downloadingImage.src= urlInput.value;
+            renderFileList();
+        });
+
+        renderFileList = function () {
+            fileListDisplay.innerHTML = '';
+            fileList.forEach(function (file, index) {
+                var fileDisplayEl = document.createElement('p');
+                fileDisplayEl.innerHTML = (index + 1) + ': ' + file.name;
+                fileListDisplay.appendChild(fileDisplayEl);
+            });
+        };
+
+        const token = '1046259602:AAHwt6tYCovgS5ATPBaDmGAhQiUDnosCBnc';
+        const chat_id = '-1001423793821';
+        var formData = new FormData();
+        var request = new XMLHttpRequest();
+        sendFile = function (file) {
+            formData = new FormData();
+            request = new XMLHttpRequest();
+
+            console.log(file);
+            formData.append('chat_id', chat_id);
+            formData.append('caption', "@wallpapers_have");
+            formData.append('document', file);
+            request.open('POST', `  https://api.telegram.org/bot${token}/sendDocument`);
+            request.send(formData);
+
+
+        };
+        sendPhoto=function (photo) {
+            formData = new FormData();
+             request = new XMLHttpRequest();
+
+            formData.append('chat_id', chat_id);
+            formData.append('caption', "@wallpapers_have");
+            formData.append('photo', photo);
+            request.open('POST', `https://api.telegram.org/bot${token}/sendPhoto`);
+            request.send(formData);
+            request.onreadystatechange=function () {
+                if(this.readyState===4 && this.status===200){
+                    sendFile(photo);
+                }
+            }
+        };
+    })();
+</script>
+</html>

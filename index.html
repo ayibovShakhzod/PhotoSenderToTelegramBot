@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="">
+    <input type="text" id="name" placeholder="Имя">
+    <input type="tel" class="tel" id="tel" value="+998">
+    <input type="file" id="file" multiple>
+    <button type="button" id="btn" class="btn btn-success button">Отправить</button>
+</div>
+<div>
+    <!--method="POST" action="https://api.telegram.org/bot1046259602:AAHwt6tYCovgS5ATPBaDmGAhQiUDnosCBnc/sendDocument" enctype="multipart/form-data"-->
+    <!--<form>-->
+
+    <!--    chat ID-->
+    <!--    <input type="text" name="chat_id" value="-1001423793821" />-->
+    <!--    <br/>-->
+
+    <!--    caption(comment on photo)-->
+    <!--    <input type="text" name="caption" value="hi world"/>-->
+    <!--    <br/>-->
+
+    <!--    select File from you pc-->
+    <!--    <input type="file" name="document"/>-->
+    <!--    <br/>-->
+
+    <!--    send btn.-->
+    <!--    <input type="submit" value="sendPhoto" />-->
+
+    <!--</form>--></div>
+</body>
+<script src="jquery-3.4.1.slim.min.js"></script>
+<script type="text/javascript">
+    $("#btn").on("click", function () {
+
+    var name = $("#name").val();
+    var phone = $("#tel").val();
+ var   file = $("#file");
+    var seqForm = {
+        Name: name,
+        Phone: phone,
+        File: file
+    };
+
+        console.log(file);
+
+        // https://api.telegram.org/bot1046259602:AAHwt6tYCovgS5ATPBaDmGAhQiUDnosCBnc/sendMessage?chat_id=-1001423793821&text=sfqfwqf
+    const token = '1046259602:AAHwt6tYCovgS5ATPBaDmGAhQiUDnosCBnc';
+    const chat_id = '-1001423793821';
+        var enc_data = "This is my default text";
+        var blob = new Blob([enc_data], { type: 'plain/file' });
+
+        var formData = new FormData();
+        formData.append('chat_id', chat_id);
+        formData.append('document', blob, file.files);
+
+        var request = new XMLHttpRequest();
+        request.open('POST', `https://api.telegram.org/bot${token}/sendDocument`);
+        request.send(formData);
+    //
+    //     var request = new XMLHttpRequest();
+    //     request.open('POST', `https://api.telegram.org/bot${token}/sendDocument`);
+    //     request.send(formData);
+    // let url = 'https://api.telegram.org/bot' + token + '/sendMessage?chat_id=' + chat_id +
+    //     '&text=Name:  ' + seqForm.Name + "%0APhone number: " + seqForm.Phone;
+    // console.log(url);
+    // let xhttp = new XMLHttpRequest();
+    // xhttp.open("POST", url, true);
+    // xhttp.send();
+    });
+
+</script>
+</html>
